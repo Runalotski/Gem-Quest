@@ -8,13 +8,11 @@ public class TokenClass
     public Transform transform;
     public TokenTypes type;
     public GridPos position;
-    public bool updated;
 
-    public TokenClass(Transform transform, TokenTypes type, GridPos position, bool updated = false)
+    public TokenClass(Transform transform, TokenTypes type, GridPos position)
     {
         this.transform = transform;
         this.type = type;
         this.position = position;
-        this.updated = updated;
     }
 }

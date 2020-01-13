@@ -104,9 +104,6 @@ public class InteractWithTokens : MonoBehaviour
         TokenGridRenderer.AddToAnimationQueue(tk1v, tk1v.transform.position);
         TokenGridRenderer.AddToAnimationQueue(tk2v, tk2v.transform.position);
 
-        //TokenGridData.Grid[tk1x, tk1y].updated = true;
-        //TokenGridData.Grid[tk2x, tk2y].updated = true;
-
         TokenGridManager.animating = true;
     }
 
