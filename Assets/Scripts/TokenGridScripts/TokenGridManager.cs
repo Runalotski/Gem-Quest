@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TokenGridManager : MonoBehaviour
 {
+    public static bool animating = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +15,15 @@ public class TokenGridManager : MonoBehaviour
                                                                      TokenClass.TokenTypes.White});
 
         this.transform.GetComponent<TokenGridRenderer>().RenderGrid();
+    }
+
+    void Update()
+    {
+        if(animating)
+        {
+            TokenGridRenderer.AnimateGrid();
+        }
+
     }
 
 }

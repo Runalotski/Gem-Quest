@@ -86,7 +86,7 @@ public static class TokenGridData
         }
         else
         {
-            return new TokenClass(null, selected);
+            return new TokenClass(null, selected, new GridPos(x,y));
         }
 
     }

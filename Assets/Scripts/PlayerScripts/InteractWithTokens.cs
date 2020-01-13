@@ -20,14 +20,20 @@ public class InteractWithTokens : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!TokenGridManager.animating)
+            PlayerInput();
+    }
+
+    void PlayerInput()
+    {
         Vector3 MouseInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        //offset by half token as tokens grid is on token center
         int mX = (int)(MouseInWorld.x + 0.5f);
         int mY = (int)(MouseInWorld.y + 0.5f);
 
         //Check that the click is on the grid
-        if(mouseIsInTokenGrid(mX, mY))
+        if (mouseIsInTokenGrid(mX, mY))
         {
             Highlight.GetComponent<SpriteRenderer>().enabled = true;
             Highlight.transform.position = new Vector3(mX, mY, Highlight.transform.position.z);
@@ -41,14 +47,12 @@ public class InteractWithTokens : MonoBehaviour
                     Debug.Log("You have selected a new Token");
                 }
                 //if we do already have a selected token, check if we are clicking an adjecent one
-                else if (isAdjacentToSelected(mX,mY))
+                else if (isAdjacentToSelected(mX, mY))
                 {
                     Debug.Log("Swapping Selected token ");
                     SwapToken(selectedToken.x, selectedToken.y, mX, mY);
 
-
-
-                    GridRenderer.GetComponent<TokenGridRenderer>().RenderGrid();
+                    //GridRenderer.GetComponent<TokenGridRenderer>().RenderGrid();
                     SetSelectedToken(null);
                 }
             }
@@ -59,7 +63,7 @@ public class InteractWithTokens : MonoBehaviour
         }
 
 
-        if(Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2"))
         {
             SetSelectedToken(null);
         }
@@ -91,12 +95,19 @@ public class InteractWithTokens : MonoBehaviour
         TokenClass tk1v = TokenGridData.Grid[tk1x, tk1y];
         TokenClass tk2v = TokenGridData.Grid[tk2x, tk2y];
 
+        tk1v.position = new GridPos(tk2x, tk2y);
+        tk2v.position = new GridPos(tk1x, tk1y);
+
         TokenGridData.Grid[tk1x, tk1y] = tk2v;
         TokenGridData.Grid[tk2x, tk2y] = tk1v;
 
-        TokenGridData.Grid[tk1x, tk1y].updated = true;
-        TokenGridData.Grid[tk2x, tk2y].updated = true;
+        TokenGridRenderer.AddToAnimationQueue(tk1v, tk1v.transform.position);
+        TokenGridRenderer.AddToAnimationQueue(tk2v, tk2v.transform.position);
 
+        //TokenGridData.Grid[tk1x, tk1y].updated = true;
+        //TokenGridData.Grid[tk2x, tk2y].updated = true;
+
+        TokenGridManager.animating = true;
     }
 
     bool isAdjacentToSelected(int mouseX, int mouseY)
