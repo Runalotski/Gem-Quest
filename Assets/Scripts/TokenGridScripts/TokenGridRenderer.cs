@@ -13,7 +13,7 @@ public class TokenGridRenderer : MonoBehaviour
     {
         animateTime += (Time.deltaTime * 4);
 
-        for(int i = 0; i < tokensToAnimate.Count; i++)
+        for (int i = 0; i < tokensToAnimate.Count; i++)
         {
             Transform TokenTransform = tokensToAnimate[i].transform;
             Vector3 StartPos = tokenStartPositions[i];
@@ -26,6 +26,20 @@ public class TokenGridRenderer : MonoBehaviour
         {
             TokenGridManager.animating = false;
             animateTime = 0;
+
+            foreach (TokenClass token in tokensToAnimate)
+            {
+                if (TokenGridData.FindMatch(token))
+                {
+                    List<TokenClass> tkl = TokenGridData.FindLinkedTypes(token);
+
+                    foreach (TokenClass tc in tkl)
+                    {
+                        Destroy(tc.transform.gameObject);
+                        Debug.Log("Spawn a new Trasform aboce level here");
+                    }
+                }
+            }
 
             tokensToAnimate.Clear();
             tokenStartPositions.Clear();

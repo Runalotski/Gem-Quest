@@ -9,6 +9,8 @@ public class TokenGridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
         TokenGridData.CreateNewGrid(new TokenClass.TokenTypes[]{ TokenClass.TokenTypes.Red,
                                                                      TokenClass.TokenTypes.Blue,
                                                                      TokenClass.TokenTypes.Green,

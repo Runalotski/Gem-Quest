@@ -44,13 +44,11 @@ public class InteractWithTokens : MonoBehaviour
                 if (selectedToken == null)
                 {
                     SetSelectedToken(new GridPos(mX, mY));
-                    Debug.Log("You have selected a new Token");
                 }
                 //if we do already have a selected token, check if we are clicking an adjecent one
-                else if (isAdjacentToSelected(mX, mY))
+                else if (TokenGridData.TokensAreAdjacent(selectedToken, new GridPos(mX, mY)))
                 {
-                    Debug.Log("Swapping Selected token ");
-                    SwapToken(selectedToken.x, selectedToken.y, mX, mY);
+                    TokenGridData.SwapToken(new GridPos(selectedToken.x, selectedToken.y), new GridPos(mX, mY));
 
                     //GridRenderer.GetComponent<TokenGridRenderer>().RenderGrid();
                     SetSelectedToken(null);
@@ -62,17 +60,12 @@ public class InteractWithTokens : MonoBehaviour
             Highlight.GetComponent<SpriteRenderer>().enabled = false;
         }
 
-
         if (Input.GetButtonDown("Fire2"))
         {
             SetSelectedToken(null);
         }
     }
 
-    void CheckForMatch()
-    {
-
-    }
 
     void SetSelectedToken(GridPos pos)
     {
@@ -90,42 +83,7 @@ public class InteractWithTokens : MonoBehaviour
         }
     }
 
-    void SwapToken(int tk1x, int tk1y, int tk2x, int tk2y)
-    {
-        TokenClass tk1v = TokenGridData.Grid[tk1x, tk1y];
-        TokenClass tk2v = TokenGridData.Grid[tk2x, tk2y];
-
-        tk1v.position = new GridPos(tk2x, tk2y);
-        tk2v.position = new GridPos(tk1x, tk1y);
-
-        TokenGridData.Grid[tk1x, tk1y] = tk2v;
-        TokenGridData.Grid[tk2x, tk2y] = tk1v;
-
-        TokenGridRenderer.AddToAnimationQueue(tk1v, tk1v.transform.position);
-        TokenGridRenderer.AddToAnimationQueue(tk2v, tk2v.transform.position);
-
-        TokenGridManager.animating = true;
-    }
-
-    bool isAdjacentToSelected(int mouseX, int mouseY)
-    {
-        if (selectedToken == null)
-        {
-            Debug.LogError("Tried to swap a token without having a selected token");
-            return false;
-        }
-
-        //Is mouse position adajcent to the selected token to swap?
-        if ((mouseX == selectedToken.x + 1 || mouseX == selectedToken.x - 1) && mouseY == selectedToken.y)
-            return true;
-
-        if ((mouseY == selectedToken.y + 1 || mouseY == selectedToken.y - 1) && mouseX == selectedToken.x)
-            return true;
-
-        //No Match found return false
-        return false;
-
-    }
+   
 
     bool mouseIsInTokenGrid(int mouseX, int mouseY)
     {
