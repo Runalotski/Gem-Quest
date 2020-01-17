@@ -51,6 +51,8 @@ public class TokenGridRenderer : MonoBehaviour
                         {
                             Destroy(tc.transform.gameObject);
 
+                            QuitButton.score += ((int)tc.type) * 1000000 + Random.Range(1,999999);
+
                             tc.transform = null;
                             TokenGridData.destroyedTokens[tc.position.x] += 1;
                         }

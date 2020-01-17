@@ -13,18 +13,18 @@ public static class TokenGridData
 
     public static Dictionary<TokenClass.TokenTypes, Transform> Tokens = new Dictionary<TokenClass.TokenTypes, Transform>();
 
-    public static void CreateNewGrid(TokenClass.TokenTypes[] possiblTokens)
+    public static void CreateNewGrid(TokenClass.TokenTypes[] possibleTokens)
     {
         //iterate over the whole grid and assign a random token from a select list.
         for(int y = 0; y < GRID_SIZE; y++)
         {
             for(int x = 0; x < GRID_SIZE; x++)
             {
-                int rnd = Random.Range(0, possiblTokens.Length);
+                int rnd = Random.Range(0, possibleTokens.Length);
 
-                TokenClass.TokenTypes SelectedToken = possiblTokens[rnd];
+                TokenClass.TokenTypes SelectedToken = possibleTokens[rnd];
 
-                Grid[x, y] = ReturnNonmatchingToken(possiblTokens, SelectedToken, x, y);
+                Grid[x, y] = ReturnNonmatchingToken(possibleTokens, SelectedToken, x, y);
 
             }
         }
@@ -222,7 +222,7 @@ public static class TokenGridData
                     if(y >= GRID_SIZE - destroyedTokens[x])
                     {
                         //Debug.Log("=============================================== Try Spawn ");
-                        Grid[x, y].Randomise();
+                        Grid[x, y].Randomise(TokenGridManager.Level1);
                         Grid[x, y].transform.position = new Vector3(x, (GRID_SIZE + (y - (GRID_SIZE - destroyedTokens[x]))), 0);
                         TokenGridRenderer.AddToAnimationQueue(Grid[x, y]);
 
