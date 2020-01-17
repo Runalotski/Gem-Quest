@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TokenClass
 { 
-    public enum TokenTypes { EMPTY, Black, Blue, Green, Orange, Purple, Red, White, Yellow };
+    public enum TokenTypes { EMPTY, Black, Blue, Green, Orange, Purple, Red, White, Yellow, COUNT };
     public Transform transform;
     public TokenTypes type;
     public GridPos position;
@@ -14,6 +14,18 @@ public class TokenClass
         this.transform = transform;
         this.type = type;
         this.position = position;
+    }
+
+    public void Randomise()
+    {
+        int rnd = Random.Range(1, (int)TokenTypes.COUNT);
+
+        type = (TokenTypes)rnd;
+
+        transform = TokenGridRenderer.CreateNewTokenTransform(position);
+
+        //Debug.Log("=============================================== Spawned " + position + " Is Null? " + (TokenGridData.Grid[position.x, position.y].transform == null).ToString());
+
     }
 
     /*

@@ -7,26 +7,33 @@ public class TokenGridRenderer : MonoBehaviour
     static List<TokenClass> tokensToAnimate = new List<TokenClass>();
     static List<Vector3> tokenStartPositions = new List<Vector3>();
 
+    public Transform TokenParent;
+    public static Transform TOKEN_PARENT;
+
     static float animateTime = 0;
+
+    public void Awake()
+    {
+        TOKEN_PARENT = TokenParent;
+    }
 
     public static void AnimateGrid()
     {
+
         animateTime += (Time.deltaTime * 4);
 
         for (int i = 0; i < tokensToAnimate.Count; i++)
         {
             Transform TokenTransform = tokensToAnimate[i].transform;
             Vector3 StartPos = tokenStartPositions[i];
-            Vector3 TokenDest = new Vector3(tokensToAnimate[i].position.x, tokensToAnimate[i].position.y, TokenTransform.position.z);
+            Vector3 TokenDest = new Vector3(tokensToAnimate[i].position.x, tokensToAnimate[i].position.y, 0);
 
             tokensToAnimate[i].transform.position = Vector3.Lerp(tokenStartPositions[i], TokenDest, animateTime);
         }
 
         if (animateTime >= 1f)
         {
-            TokenGridManager.animating = false;
-            animateTime = 0;
-
+            Debug.Log("======================  Animation Complete  ====================== ");
             foreach (TokenClass token in tokensToAnimate)
             {
                 if (TokenGridData.FindMatch(token))
@@ -34,22 +41,42 @@ public class TokenGridRenderer : MonoBehaviour
                     List<TokenClass> tkl = TokenGridData.FindLinkedTypes(token);
 
                     foreach (TokenClass tc in tkl)
+                        Debug.Log(tc + " !null? " + (tc.transform != null).ToString() );
+
+                    Debug.Log("======================  Destroy  ======================");
+
+                    foreach (TokenClass tc in tkl)
                     {
-                        Destroy(tc.transform.gameObject);
-                        Debug.Log("Spawn a new Trasform aboce level here");
+                        if (tc.transform != null)
+                        {
+                            Destroy(tc.transform.gameObject);
+
+                            tc.transform = null;
+                            TokenGridData.destroyedTokens[tc.position.x] += 1;
+                        }
                     }
+
+                    tkl.Clear();
                 }
             }
 
             tokensToAnimate.Clear();
             tokenStartPositions.Clear();
+            animateTime = 0;
+
+            TokenGridData.SettleAndSpawnTokens();
+
+            if (tokensToAnimate.Count == 0)
+                TokenGridManager.animating = false;
+
         }
+  
     }
 
-    public static void AddToAnimationQueue(TokenClass Token, Vector3 StartLocation)
+    public static void AddToAnimationQueue(TokenClass Token)
     {
         tokensToAnimate.Add(Token);
-        tokenStartPositions.Add(StartLocation);
+        tokenStartPositions.Add(Token.transform.position);
     }
 
     public static void RemoveFromAnimateQueue(List<int> index)
@@ -72,9 +99,14 @@ public class TokenGridRenderer : MonoBehaviour
         {
             for (int x = 0; x < TokenGridData.GRID_SIZE; x++)
             {
-                TokenGridData.Grid[x, y].transform = Instantiate(TokenGridData.Tokens[TokenGridData.Grid[x, y].type], new Vector3(x,y,0), Quaternion.identity, this.transform) as Transform;
+                TokenGridData.Grid[x, y].transform = CreateNewTokenTransform(new GridPos(x, y));
             }
         }
+    }
+
+    public static Transform CreateNewTokenTransform(GridPos gPos)
+    {
+        return Instantiate(TokenGridData.Tokens[TokenGridData.Grid[gPos.x, gPos.y].type], new Vector3(gPos.x, gPos.y, 0), Quaternion.identity, TOKEN_PARENT) as Transform;
     }
 
 }

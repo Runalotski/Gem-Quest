@@ -41,12 +41,12 @@ public class InteractWithTokens : MonoBehaviour
             if (Input.GetButtonUp("Fire1"))
             {
                 //if we do not have a token selected, selected the one under the mouse position
-                if (selectedToken == null)
+                if (selectedToken == null && TokenGridData.IsValidToken(new GridPos(mX, mY)))
                 {
                     SetSelectedToken(new GridPos(mX, mY));
                 }
                 //if we do already have a selected token, check if we are clicking an adjecent one
-                else if (TokenGridData.TokensAreAdjacent(selectedToken, new GridPos(mX, mY)))
+                else if (TokenGridData.TokensAreValidForSwap(selectedToken, new GridPos(mX, mY)))
                 {
                     TokenGridData.SwapToken(new GridPos(selectedToken.x, selectedToken.y), new GridPos(mX, mY));
 

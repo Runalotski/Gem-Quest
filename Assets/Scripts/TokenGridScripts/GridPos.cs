@@ -13,7 +13,6 @@ public class GridPos {
         this.y = y;
     }
 
-    /*
     public override bool Equals(System.Object obj)
     {
         //Check for null and compare run-time types.
@@ -28,27 +27,11 @@ public class GridPos {
         }
     }
 
-    public static bool operator ==(GridPos lhs, GridPos rhs)
-    {
-        if (lhs != null && rhs != null)
-            return lhs.x == rhs.x && lhs.y == rhs.y;
-        else
-            return false;
-    }
-
-    public static bool operator !=(GridPos lhs, GridPos rhs)
-    {
-        if (lhs == null && rhs != null)
-            return !(lhs.x == rhs.x && lhs.y == rhs.y);
-        else
-            return false;
-    }
-
     public override int GetHashCode()
     {
         return (x << 2) ^ y;
     }
-    */
+
     public override string ToString()
     {
         return "Grid Pos (" + x + "," + y + ")";
